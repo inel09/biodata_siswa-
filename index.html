@@ -10,23 +10,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
+/* === PENGATURAN WARNA UTAMA === */
 :root {
-    --bg: #eef2f7;
-    --kartu: #ffffff;
-    --teks: #14213d;
-    --teks-redup: #5b667a;
-    --garis: #d6dde8;
-    --aksen: #1d4ed8;
+    --bg: #f0f4f8;               /* Latar belakang utama (Terang) */
+    --kartu: #ffffff;            /* Latar belakang kartu */
+    --teks: #0f172a;             /* Warna teks utama */
+    --teks-redup: #475569;       /* Warna teks sekunder/deskripsi */
+    --garis: #e2e8f0;            /* Warna garis pembatas */
+    --aksen: #2563eb;            /* Warna aksen utama (Biru) */
+    --pita-bg: linear-gradient(135deg, #2563eb, #3b82f6); /* Gradasi pita kartu */
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg: #0e1522;
-        --kartu: #172033;
-        --teks: #e8edf6;
-        --teks-redup: #98a4ba;
-        --garis: #2a3650;
-        --aksen: #6c9bff;
+        --bg: #0f172a;           /* Latar belakang utama (Gelap) */
+        --kartu: #1e293b;        /* Latar belakang kartu */
+        --teks: #f8fafc;         /* Warna teks utama */
+        --teks-redup: #94a3b8;   /* Warna teks sekunder */
+        --garis: #334155;        /* Warna garis pembatas */
+        --aksen: #60a5fa;        /* Warna aksen utama */
+        --pita-bg: linear-gradient(135deg, #1d4ed8, #2563eb);
     }
 }
 
@@ -40,7 +43,7 @@ body {
 }
 
 .wadah { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; }
-header h1 { margin: 0 0 4px; font-size: 1.75rem; font-weight: 800; }
+header h1 { margin: 0 0 4px; font-size: 1.75rem; font-weight: 800; color: var(--teks); }
 header p { margin: 0; color: var(--teks-redup); }
 
 /* Kolom pencarian dan filter */
@@ -74,20 +77,37 @@ header p { margin: 0; color: var(--teks-redup); }
     border: 1px solid var(--garis);
     border-radius: 14px;
     overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
-.pita { height: 56px; background:pink;}
+
+/* Ganti warna pita di atas kartu */
+.pita { 
+    height: 56px; 
+    background: var(--pita-bg);
+}
+
 .isi { padding: 0 16px 16px; text-align: center; }
+
+/* Lingkaran foto / inisial */
 .foto {
     width: 76px; height: 76px;
     margin: -38px auto 8px;
     border-radius: 50%;
     border: 4px solid var(--kartu);
-    background: hsl(var(--hue) 55% 88%);
-    color: FFC0CB;
+    background: hsl(var(--hue) 65% 90%);
+    color: hsl(var(--hue) 80% 30%);
     display: grid; place-items: center;
     font-weight: 800; font-size: 1.5rem;
     overflow: hidden;
 }
+
+@media (prefers-color-scheme: dark) {
+    .foto {
+        background: hsl(var(--hue) 50% 25%);
+        color: hsl(var(--hue) 80% 85%);
+    }
+}
+
 .foto img { width: 100%; height: 100%; object-fit: cover; }
 .nama { margin: 0; font-size: 1.05rem; font-weight: 800; }
 .nis { margin: 0 0 12px; color: var(--teks-redup); font-size: 0.85rem; }
@@ -106,8 +126,8 @@ header p { margin: 0; color: var(--teks-redup); }
     padding: 40px 16px;
     color: var(--teks-redup);
 }
-.pesan.galat { color: #d93838; }
-@media (prefers-color-scheme: dark) { .pesan.galat { color: #ff8b80; } }
+.pesan.galat { color: #ef4444; }
+@media (prefers-color-scheme: dark) { .pesan.galat { color: #f87171; } }
 </style>
 </head>
 <body>
