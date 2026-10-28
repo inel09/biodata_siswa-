@@ -64,6 +64,32 @@ header p { margin: 0; color: var(--teks-redup); }
 }
 .jumlah { color: var(--teks-redup); font-size: 0.9rem; margin: 0 0 16px; }
 
+/* Pembungkus per Kelas */
+.grup-kelas {
+    margin-bottom: 32px;
+}
+.judul-kelas {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin: 0 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--garis);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.info-guru {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--aksen);
+    background: var(--kartu);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--garis);
+}
+
 /* Susunan kartu */
 .daftar {
     display: grid;
@@ -80,7 +106,6 @@ header p { margin: 0; color: var(--teks-redup); }
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-/* Ganti warna pita di atas kartu */
 .pita { 
     height: 56px; 
     background: var(--pita-bg);
@@ -144,7 +169,7 @@ header p { margin: 0; color: var(--teks-redup); }
         </select>
     </div>
     <p id="jumlah" class="jumlah" aria-live="polite"></p>
-    <main id="daftar" class="daftar"></main>
+    <main id="kontainerUtama"></main>
 </div>
 
 <!-- Library Supabase dari CDN -->
@@ -165,25 +190,25 @@ const TAMPILKAN = {
 // LANGKAH 2: HUBUNGKAN KE SUPABASE
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const elDaftar = document.getElementById("daftar");
+const elKontainerUtama = document.getElementById("kontainerUtama");
 const elJumlah = document.getElementById("jumlah");
 const elCari = document.getElementById("cari");
 const elKelas = document.getElementById("filterKelas");
 
 let semuaSiswa = [];
 
-// LANGKAH 3: AMBIL DATA
+// LANGKAH 3: AMBIL DATA (Pastikan tabel 'siswa' memiliki kolom 'guru' atau relasi terkait)
 async function muatData() {
     tampilkanPesan("Memuat data siswa...");
     
     const { data, error } = await db
         .from("siswa")
-        .select("nis, nama, kelas, jenis_kelamin, tanggal_lahir, alamat, foto_url")
+        .select("nis, nama, kelas, guru, jenis_kelamin, tanggal_lahir, alamat, foto_url")
         .order("nama");
 
     if (error) {
         console.error(error);
-        tampilkanPesan("Data tidak bisa dimuat. Periksa URL dan anon key, nama tabel, serta policy RLS di Supabase.", true);
+        tampilkanPesan("Data tidak bisa dimuat. Pastikan kolom 'guru' sudah ada di tabel Supabase.", true);
         return;
     }
 
@@ -192,7 +217,7 @@ async function muatData() {
     tampilkanSiswa();
 }
 
-// LANGKAH 4: TAMPILKAN KARTU
+// LANGKAH 4: TAMPILKAN KARTU BERDASARKAN KELAS & NAMA
 function tampilkanSiswa() {
     const kataKunci = elCari.value.trim().toLowerCase();
     const kelasDipilih = elKelas.value;
@@ -206,14 +231,47 @@ function tampilkanSiswa() {
     });
 
     elJumlah.textContent = hasil.length + " dari " + semuaSiswa.length + " siswa";
-    elDaftar.replaceChildren();
+    elKontainerUtama.replaceChildren();
 
     if (hasil.length === 0) {
-        tampilkanPesan(semuaSiswa.length === 0 ? "Belum ada data siswa. Tambahkan data lewat Table Editor di Supabase." : "Tidak ada siswa yang cocok. Coba kata kunci atau kelas lain.");
+        tampilkanPesan(semuaSiswa.length === 0 ? "Belum ada data siswa." : "Tidak ada siswa yang cocok.");
         return;
     }
 
-    hasil.forEach((s) => elDaftar.appendChild(buatKartu(s)));
+    // Kelompokkan data yang sudah difilter berdasarkan kelas
+    const kelompokKelas = {};
+    hasil.forEach((s) => {
+        const kls = s.kelas || "Tanpa Kelas";
+        if (!kelompokKelas[kls]) {
+            kelompokKelas[kls] = {
+                guru: s.guru || "Wali Kelas Belum Diatur",
+                siswa: []
+            };
+        }
+        kelompokKelas[kls].siswa.push(s);
+    });
+
+    // Urutkan nama siswa secara *ascending* (A-Z) di dalam masing-masing kelompok kelas
+    Object.keys(kelompokKelas).sort().forEach((kls) => {
+        const dataGrup = kelompokKelas[kls];
+        dataGrup.siswa.sort((a, b) => a.nama.localeCompare(b.nama));
+
+        // Buat elemen pembungkus grup kelas
+        const divGrup = el("section", "grup-kelas");
+        
+        const judul = el("h2", "judul-kelas", kls);
+        const spanGuru = el("span", "info-guru", "Wali Kelas: " + dataGrup.guru);
+        judul.appendChild(spanGuru);
+        divGrup.appendChild(judul);
+
+        const gridDaftar = el("div", "daftar");
+        dataGrup.siswa.forEach((s) => {
+            gridDaftar.appendChild(buatKartu(s));
+        });
+
+        divGrup.appendChild(gridDaftar);
+        elKontainerUtama.appendChild(divGrup);
+    });
 }
 
 function buatKartu(s) {
@@ -284,7 +342,7 @@ function formatTanggal(teks) {
 }
 
 function tampilkanPesan(teks, galat) {
-    elDaftar.replaceChildren(el("p", "pesan" + (galat ? " galat" : ""), teks));
+    elKontainerUtama.replaceChildren(el("p", "pesan" + (galat ? " galat" : ""), teks));
 }
 
 function isiPilihanKelas() {
