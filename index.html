@@ -70,10 +70,9 @@ header p { margin: 0; color: var(--teks-redup); }
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    transition: background 0.2s, opacity 0.2s;
+    transition: background 0.2s;
 }
 .btn:hover { background: var(--aksen-hover); }
-.btn:active { opacity: 0.85; }
 .btn-sekunder { background: transparent; border: 1px solid var(--garis); color: var(--teks); }
 .btn-sekunder:hover { background: var(--garis); }
 .btn-bahaya { background: var(--bahaya); color: #fff; }
@@ -270,7 +269,7 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
 
 <!-- Modal Form Tambah/Edit -->
 <dialog id="modalData">
-    <form id="formData">
+    <form id="formData" method="dialog">
         <div class="modal-header">
             <h3 id="modalJudul">Tambah Data Baru</h3>
             <button type="button" class="btn-sekunder" id="tutupModal" style="border:none; padding:4px 8px; border-radius:6px; cursor:pointer;">✕</button>
@@ -310,10 +309,10 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
             <input type="date" id="inputTgl">
         </div>
 
-        <!-- Field Khusus Guru -->
+        <!-- Field Khusus Guru (Diperbarui sesuai foto) -->
         <div class="form-grup field-guru" style="display: none;">
             <label for="inputMapel">Mata Pelajaran / Keahlian *</label>
-            <input type="text" id="inputMapel" placeholder="Contoh: Administrasi Server">
+            <input type="text" id="inputMapel" required placeholder="Contoh: Administrasi Server">
         </div>
 
         <div class="form-grup">
@@ -363,30 +362,27 @@ const elToast = document.getElementById("toast");
 const inputTipe = document.getElementById("inputTipe");
 
 let semuaData = [];
-let timeoutToast = null;
 
 function tampilkanToast(pesan, tipe = 'sukses') {
-    clearTimeout(timeoutToast);
     elToast.textContent = pesan;
     elToast.className = `muncul ${tipe}`;
-    timeoutToast = setTimeout(() => {
+    setTimeout(() => {
         elToast.className = '';
     }, 3000);
 }
 
-// AMBIL DATA DARI SUPABASE DENGAN ERROR HANDLING YANG AMAN
+// AMBIL DATA DARI SUPABASE
 async function muatData() {
     tampilkanPesan("Memuat data guru & siswa...");
     
     const { data, error } = await db
         .from("siswa")
         .select("*")
-        .order("nama", { ascending: true });
+        .order("nama");
 
     if (error) {
         console.error(error);
-        tampilkanPesan("Gagal memuat data dari database.", true);
-        tampilkanPesanStatus("Data tidak bisa dimuat. Periksa koneksi atau struktur tabel Anda.", true);
+        tampilkanPesan("Data tidak bisa dimuat. Pastikan struktur tabel Supabase mendukung kolom 'tipe', 'mapel', dll.", true);
         return;
     }
 
@@ -395,26 +391,14 @@ async function muatData() {
     tampilkanData();
 }
 
-// TOGGLE FORM DINAMIS & PENGATURAN ATRIBUT REQUIRED
+// TOGGLE FORM BERDASARKAN TIPE (GURU / SISWA)
 inputTipe.onchange = () => {
     const isGuru = inputTipe.value === "Guru";
     document.getElementById("labelNomorInduk").textContent = isGuru ? "NIP *" : "NIS *";
     document.getElementById("inputNomorInduk").placeholder = isGuru ? "Contoh: 19850101..." : "Contoh: 22231001";
     
-    const inputKelas = document.getElementById("inputKelas");
-    const inputMapel = document.getElementById("inputMapel");
-
     document.querySelectorAll(".field-siswa").forEach(el => el.style.display = isGuru ? "none" : "block");
     document.querySelectorAll(".field-guru").forEach(el => el.style.display = isGuru ? "block" : "none");
-
-    // Mengatur atribut required secara bersih agar validasi form browser tidak error
-    if (isGuru) {
-        inputKelas.removeAttribute("required");
-        inputMapel.setAttribute("required", "true");
-    } else {
-        inputMapel.removeAttribute("required");
-        inputKelas.setAttribute("required", "true");
-    }
 };
 
 // TAMPILKAN KARTU KE LAYAR
@@ -438,17 +422,15 @@ function tampilkanData() {
         return cocokTipe && cocokKelas && cocokMapel && cocokCari;
     });
 
-    elJumlah.textContent = `${hasil.length} dari ${semuaData.length} data ditampilkan`;
+    elJumlah.textContent = hasil.length + " dari " + semuaData.length + " data ditampilkan";
     elDaftar.replaceChildren();
 
     if (hasil.length === 0) {
-        tampilkanPesanStatus(semuaData.length === 0 ? "Belum ada data. Klik tombol '+ Tambah Data Guru/Siswa' di atas." : "Tidak ada data yang cocok dengan pencarian.");
+        tampilkanPesan(semuaData.length === 0 ? "Belum ada data. Klik tombol 'Tambah Data' di atas." : "Tidak ada data yang cocok.");
         return;
     }
 
-    const fragment = document.createDocumentFragment();
-    hasil.forEach((s) => fragment.appendChild(buatKartu(s)));
-    elDaftar.appendChild(fragment);
+    hasil.forEach((s) => elDaftar.appendChild(buatKartu(s)));
 }
 
 function buatKartu(s) {
@@ -474,7 +456,7 @@ function buatKartu(s) {
     isi.appendChild(foto);
     isi.appendChild(el("h2", "nama", s.nama));
     
-    const nomorInduk = isGuru ? ("NIP: " + (s.nip || "-")) : ("NIS: " + (s.nis || "-"));
+    const nomorInduk = isGuru ? ("NIP: " + (s.nip || "-")) : ("NIS " + (s.nis || "-"));
     isi.appendChild(el("p", "sub-teks", nomorInduk));
 
     const rincian = el("dl", "rincian");
@@ -494,12 +476,10 @@ function buatKartu(s) {
     
     const btnEdit = document.createElement("button");
     btnEdit.textContent = "✏️ Ubah";
-    btnEdit.type = "button";
     btnEdit.onclick = () => bukaFormEdit(s);
     
     const btnHapus = document.createElement("button");
     btnHapus.textContent = "🗑️ Hapus";
-    btnHapus.type = "button";
     btnHapus.className = "btn-hapus-item";
     btnHapus.onclick = () => hapusData(s.id, s.nama);
 
@@ -511,7 +491,7 @@ function buatKartu(s) {
     return kartu;
 }
 
-// KELOLA MODAL & CRUD
+// PROSES CRUD
 btnTambah.onclick = () => {
     modalJudul.textContent = "Tambah Data Baru";
     formData.reset();
@@ -599,7 +579,7 @@ async function hapusData(id, nama) {
     muatData();
 }
 
-// FUNGSI BANTU UTILITIES
+// FUNGSI BANTU
 function el(tag, kelas, teks) {
     const e = document.createElement(tag);
     if (kelas) e.className = kelas;
@@ -632,7 +612,7 @@ function formatTanggal(teks) {
     });
 }
 
-function tampilkanPesanStatus(teks, galat = false) {
+function tampilkanPesan(teks, galat) {
     elDaftar.replaceChildren(el("p", "pesan" + (galat ? " galat" : ""), teks));
 }
 
@@ -658,13 +638,11 @@ function isiPilihanFilter() {
     elFilterMapel.value = mapelAktif;
 }
 
-// EVENT LISTENERS
 elCari.addEventListener("input", tampilkanData);
 elFilterTipe.addEventListener("change", tampilkanData);
 elFilterKelas.addEventListener("change", tampilkanData);
 elFilterMapel.addEventListener("change", tampilkanData);
 
-// INISIALISASI AWAL
 muatData();
 </script>
 </body>
