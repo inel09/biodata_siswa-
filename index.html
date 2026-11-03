@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Data Guru & Siswa - CRUD Lengkap</title>
-<!-- Font Google -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -353,7 +352,7 @@ function tampilkanData() {
 
     const hasil = semuaData.filter((s) => {
         const tipeVal = s.tipe || "Siswa";
-        const mapelVal = s.mapel || "";
+        const mapelVal = s.mapel || s.Mapel || "";
         const cocokTipe = !tipeDipilih || tipeVal === tipeDipilih;
         const cocokKelas = !kelasDipilih || s.kelas === kelasDipilih;
         const cocokMapel = !mapelDipilih || mapelVal === mapelDipilih;
@@ -405,7 +404,7 @@ function buatKartu(s) {
     const rincian = el("dl", "rincian");
     tambahBaris(rincian, "Tipe", s.tipe || "Siswa");
     if (isGuru) {
-        tambahBaris(rincian, "Mapel", s.mapel);
+        tambahBaris(rincian, "Mapel", s.mapel || s.Mapel);
     } else {
         tambahBaris(rincian, "Kelas", s.kelas);
         tambahBaris(rincian, "Jenis Kelamin", s.jenis_kelamin);
@@ -455,7 +454,7 @@ function bukaFormEdit(s) {
     document.getElementById("inputKelas").value = s.kelas || "";
     document.getElementById("inputJk").value = s.jenis_kelamin || "Laki-laki";
     document.getElementById("inputTgl").value = s.tanggal_lahir || "";
-    document.getElementById("inputMapel").value = s.mapel || "";
+    document.getElementById("inputMapel").value = s.mapel || s.Mapel || "";
     document.getElementById("inputAlamat").value = s.alamat || "";
     document.getElementById("inputFoto").value = s.foto_url || "";
     modal.showModal();
@@ -471,6 +470,7 @@ formData.onsubmit = async (e) => {
     const tipe = inputTipe.value;
     const nomorInduk = document.getElementById("inputNomorInduk").value.trim();
 
+    // Menggunakan kolom mapel standar, tapi aman untuk kedua kondisi
     const dataBaru = {
         tipe: tipe,
         nis: tipe === "Siswa" ? nomorInduk : null,
@@ -500,6 +500,18 @@ formData.onsubmit = async (e) => {
     btnSimpan.textContent = "Simpan Data";
 
     if (error) {
+        // Coba fallback jika error karena database masih minta 'Mapel' huruf besar
+        if (error.message.includes("Mapel")) {
+            dataBaru.Mapel = dataBaru.mapel;
+            delete dataBaru.mapel;
+            let res2 = id ? await db.from("siswa").update(dataBaru).eq("id", id) : await db.from("siswa").insert([dataBaru]);
+            if (!res2.error) {
+                modal.close();
+                tampilkanToast("Data berhasil disimpan!");
+                muatData();
+                return;
+            }
+        }
         tampilkanToast("Gagal menyimpan data: " + error.message, "error");
         return;
     }
@@ -570,7 +582,7 @@ function isiPilihanFilter() {
 
     const mapelAktif = elFilterMapel.value;
     elFilterMapel.replaceChildren(new Option("Mapel", ""));
-    const daftarMapel = [...new Set(semuaData.map((s) => s.mapel).filter(Boolean))].sort();
+    const daftarMapel = [...new Set(semuaData.map((s) => s.mapel || s.Mapel).filter(Boolean))].sort();
     daftarMapel.forEach((m) => {
         const opsi = el("option", "", m);
         opsi.value = m;
