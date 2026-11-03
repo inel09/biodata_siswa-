@@ -309,10 +309,10 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
             <input type="date" id="inputTgl">
         </div>
 
-        <!-- Field Khusus Guru -->
+        <!-- Field Khusus Guru (Diperbarui sesuai foto) -->
         <div class="form-grup field-guru" style="display: none;">
-            <label for="inputMapel">Mata Pelajaran</label>
-            <input type="text" id="inputMapel" placeholder="Contoh: Administrasi Server">
+            <label for="inputMapel">Mata Pelajaran / Keahlian *</label>
+            <input type="text" id="inputMapel" required placeholder="Contoh: Administrasi Server">
         </div>
 
         <div class="form-grup">
@@ -371,7 +371,7 @@ function tampilkanToast(pesan, tipe = 'sukses') {
     }, 3000);
 }
 
-// AMBIL DATA DARI SUPABASE (GABUNGAN ATAU TABEL 'siswa' DENGAN KOLOM TAMBAHAN `tipe`, `nip`, `mapel`)
+// AMBIL DATA DARI SUPABASE
 async function muatData() {
     tampilkanPesan("Memuat data guru & siswa...");
     
@@ -409,7 +409,7 @@ function tampilkanData() {
     const mapelDipilih = elFilterMapel.value;
 
     const hasil = semuaData.filter((s) => {
-        const tipeVal = s.tipe || "Siswa"; // Default ke siswa jika kosong
+        const tipeVal = s.tipe || "Siswa";
         const cocokTipe = !tipeDipilih || tipeVal === tipeDipilih;
         const cocokKelas = !kelasDipilih || s.kelas === kelasDipilih;
         const cocokMapel = !mapelDipilih || s.mapel === mapelDipilih;
@@ -617,7 +617,6 @@ function tampilkanPesan(teks, galat) {
 }
 
 function isiPilihanFilter() {
-    // Filter Kelas
     const kelasAktif = elFilterKelas.value;
     elFilterKelas.replaceChildren(new Option("Kelas", ""));
     const daftarKelas = [...new Set(semuaData.map((s) => s.kelas).filter(Boolean))].sort();
@@ -628,7 +627,6 @@ function isiPilihanFilter() {
     });
     elFilterKelas.value = kelasAktif;
 
-    // Filter Mapel
     const mapelAktif = elFilterMapel.value;
     elFilterMapel.replaceChildren(new Option("Mapel", ""));
     const daftarMapel = [...new Set(semuaData.map((s) => s.mapel).filter(Boolean))].sort();
@@ -645,7 +643,6 @@ elFilterTipe.addEventListener("change", tampilkanData);
 elFilterKelas.addEventListener("change", tampilkanData);
 elFilterMapel.addEventListener("change", tampilkanData);
 
-// Muat data saat halaman dibuka
 muatData();
 </script>
 </body>
