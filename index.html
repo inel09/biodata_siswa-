@@ -353,7 +353,7 @@ function tampilkanData() {
 
     const hasil = semuaData.filter((s) => {
         const tipeVal = s.tipe || "Siswa";
-        const mapelVal = s.Mapel || s.mapel || "";
+        const mapelVal = s.mapel || "";
         const cocokTipe = !tipeDipilih || tipeVal === tipeDipilih;
         const cocokKelas = !kelasDipilih || s.kelas === kelasDipilih;
         const cocokMapel = !mapelDipilih || mapelVal === mapelDipilih;
@@ -405,7 +405,7 @@ function buatKartu(s) {
     const rincian = el("dl", "rincian");
     tambahBaris(rincian, "Tipe", s.tipe || "Siswa");
     if (isGuru) {
-        tambahBaris(rincian, "Mapel", s.Mapel || s.mapel);
+        tambahBaris(rincian, "Mapel", s.mapel);
     } else {
         tambahBaris(rincian, "Kelas", s.kelas);
         tambahBaris(rincian, "Jenis Kelamin", s.jenis_kelamin);
@@ -455,7 +455,7 @@ function bukaFormEdit(s) {
     document.getElementById("inputKelas").value = s.kelas || "";
     document.getElementById("inputJk").value = s.jenis_kelamin || "Laki-laki";
     document.getElementById("inputTgl").value = s.tanggal_lahir || "";
-    document.getElementById("inputMapel").value = s.Mapel || s.mapel || "";
+    document.getElementById("inputMapel").value = s.mapel || "";
     document.getElementById("inputAlamat").value = s.alamat || "";
     document.getElementById("inputFoto").value = s.foto_url || "";
     modal.showModal();
@@ -479,7 +479,7 @@ formData.onsubmit = async (e) => {
         kelas: tipe === "Siswa" ? document.getElementById("inputKelas").value.trim() : null,
         jenis_kelamin: tipe === "Siswa" ? document.getElementById("inputJk").value : null,
         tanggal_lahir: tipe === "Siswa" && document.getElementById("inputTgl").value ? document.getElementById("inputTgl").value : null,
-        Mapel: tipe === "Guru" ? document.getElementById("inputMapel").value.trim() : null,
+        mapel: tipe === "Guru" ? document.getElementById("inputMapel").value.trim() : null,
         alamat: document.getElementById("inputAlamat").value.trim() || null,
         foto_url: document.getElementById("inputFoto").value.trim() || null
     };
@@ -570,7 +570,7 @@ function isiPilihanFilter() {
 
     const mapelAktif = elFilterMapel.value;
     elFilterMapel.replaceChildren(new Option("Mapel", ""));
-    const daftarMapel = [...new Set(semuaData.map((s) => s.Mapel || s.mapel).filter(Boolean))].sort();
+    const daftarMapel = [...new Set(semuaData.map((s) => s.mapel).filter(Boolean))].sort();
     daftarMapel.forEach((m) => {
         const opsi = el("option", "", m);
         opsi.value = m;
