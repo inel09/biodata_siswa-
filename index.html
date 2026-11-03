@@ -10,7 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-/* === PENGATURAN WARNA UTAMA === */
 :root {
     --bg: #f0f4f8;               
     --kartu: #ffffff;            
@@ -57,7 +56,6 @@ header { display: flex; justify-content: space-between; align-items: center; fle
 header h1 { margin: 0 0 4px; font-size: 1.75rem; font-weight: 800; color: var(--teks); }
 header p { margin: 0; color: var(--teks-redup); }
 
-/* Tombol Utama */
 .btn {
     background: var(--aksen);
     color: #ffffff;
@@ -75,14 +73,7 @@ header p { margin: 0; color: var(--teks-redup); }
 .btn:hover { background: var(--aksen-hover); }
 .btn-sekunder { background: transparent; border: 1px solid var(--garis); color: var(--teks); }
 .btn-sekunder:hover { background: var(--garis); }
-.btn-bahaya { background: var(--bahaya); color: #fff; }
-.btn-bahaya:hover { background: var(--bahaya-hover); }
 
-@media (prefers-color-scheme: dark) {
-    .btn-sekunder:hover { background: #334155; }
-}
-
-/* Kolom pencarian dan filter */
 .kontrol { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0 8px; }
 .kontrol input, .kontrol select {
     font: inherit;
@@ -94,20 +85,14 @@ header p { margin: 0; color: var(--teks-redup); }
 }
 .kontrol input { flex: 1 1 200px; }
 .kontrol select { flex: 0 1 150px; }
-.kontrol input:focus-visible, .kontrol select:focus-visible {
-    outline: 2px solid var(--aksen);
-    outline-offset: 1px;
-}
 .jumlah { color: var(--teks-redup); font-size: 0.9rem; margin: 0 0 16px; }
 
-/* Susunan kartu */
 .daftar {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 16px;
 }
 
-/* Kartu */
 .kartu {
     background: var(--kartu);
     border: 1px solid var(--garis);
@@ -133,14 +118,6 @@ header p { margin: 0; color: var(--teks-redup); }
     font-weight: 800; font-size: 1.5rem;
     overflow: hidden;
 }
-
-@media (prefers-color-scheme: dark) {
-    .foto {
-        background: hsl(var(--hue) 50% 25%);
-        color: hsl(var(--hue) 80% 85%);
-    }
-}
-
 .foto img { width: 100%; height: 100%; object-fit: cover; }
 .nama { margin: 0; font-size: 1.05rem; font-weight: 800; }
 .sub-teks { margin: 0 0 12px; color: var(--teks-redup); font-size: 0.85rem; }
@@ -152,7 +129,6 @@ header p { margin: 0; color: var(--teks-redup); }
 .rincian dt { color: var(--teks-redup); }
 .rincian dd { margin: 0; font-weight: 600; text-align: right; }
 
-/* Tombol Aksi Kartu */
 .aksi-kartu {
     display: flex;
     gap: 8px;
@@ -169,13 +145,11 @@ header p { margin: 0; color: var(--teks-redup); }
     background: transparent;
     color: var(--teks);
     font-weight: 600;
-    transition: background 0.2s;
 }
 .aksi-kartu button:hover { background: var(--garis); }
-.aksi-kartu .btn-hapus-item { color: var(--bahaya); border-color: currentColor; }
-.aksi-kartu .btn-hapus-item:hover { background: var(--bahaya); color: #fff; }
+.btn-hapus-item { color: var(--bahaya); border-color: currentColor; }
+.btn-hapus-item:hover { background: var(--bahaya); color: #fff; }
 
-/* Modal Formulir */
 dialog {
     background: var(--kartu);
     color: var(--teks);
@@ -184,11 +158,9 @@ dialog {
     padding: 24px;
     width: 100%;
     max-width: 450px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 dialog::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
 .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.modal-header h3 { margin: 0; font-size: 1.25rem; font-weight: 800; }
 .form-grup { margin-bottom: 12px; }
 .form-grup label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; color: var(--teks-redup); }
 .form-grup input, .form-grup select {
@@ -202,37 +174,14 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
 }
 .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
 
-/* Pesan status */
-.pesan {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding: 40px 16px;
-    color: var(--teks-redup);
-}
-.pesan.galat { color: var(--bahaya); }
-
-/* Notifikasi Toast */
 #toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    background: var(--kartu);
-    color: var(--teks);
-    border: 1px solid var(--garis);
-    padding: 12px 20px;
-    border-radius: 10px;
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-    transform: translateY(100px);
-    opacity: 0;
-    transition: all 0.3s ease;
-    z-index: 1000;
-    font-weight: 600;
-    font-size: 0.9rem;
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--kartu); color: var(--teks);
+    border: 1px solid var(--garis); padding: 12px 20px;
+    border-radius: 10px; transform: translateY(100px); opacity: 0;
+    transition: all 0.3s ease; z-index: 1000; font-weight: 600; font-size: 0.9rem;
 }
-#toast.muncul {
-    transform: translateY(0);
-    opacity: 1;
-}
+#toast.muncul { transform: translateY(0); opacity: 1; }
 #toast.sukses { border-left: 5px solid var(--sukses); }
 #toast.error { border-left: 5px solid var(--bahaya); }
 </style>
@@ -250,26 +199,15 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
     
     <div class="kontrol">
         <input id="cari" type="search" placeholder="Cari nama, NIS/NIP, atau mapel..." aria-label="Cari data">
-        <select id="filterTipe" aria-label="Filter Guru atau Siswa">
-            <option value="">Guru & Siswa</option>
-            <option value="Siswa">Siswa</option>
-            <option value="Guru">Guru</option>
-        </select>
-        <select id="filterKelas" aria-label="Filter kelas">
-            <option value="">Kelas</option>
-        </select>
-        <select id="filterMapel" aria-label="Filter Mapel">
-            <option value="">Mapel</option>
-        </select>
+        <select id="filterTipe"><option value="">Guru & Siswa</option><option value="Siswa">Siswa</option><option value="Guru">Guru</option></select>
     </div>
     
     <p id="jumlah" class="jumlah" aria-live="polite"></p>
     <main id="daftar" class="daftar"></main>
 </div>
 
-<!-- Modal Form Tambah/Edit -->
 <dialog id="modalData">
-    <form id="formData" method="dialog">
+    <form id="formData">
         <div class="modal-header">
             <h3 id="modalJudul">Tambah Data Baru</h3>
             <button type="button" class="btn-sekunder" id="tutupModal" style="border:none; padding:4px 8px; border-radius:6px; cursor:pointer;">✕</button>
@@ -292,36 +230,14 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
             <input type="text" id="inputNama" required placeholder="Nama lengkap">
         </div>
         
-        <!-- Field Khusus Siswa -->
         <div class="form-grup field-siswa">
             <label for="inputKelas">Kelas *</label>
             <input type="text" id="inputKelas" placeholder="Contoh: XI TKJ 1">
         </div>
-        <div class="form-grup field-siswa">
-            <label for="inputJk">Jenis Kelamin</label>
-            <select id="inputJk">
-                <option value="Laki-laki">Laki-laki</option>
-                <option value="Perempuan">Perempuan</option>
-            </select>
-        </div>
-        <div class="form-grup field-siswa">
-            <label for="inputTgl">Tanggal Lahir</label>
-            <input type="date" id="inputTgl">
-        </div>
 
-        <!-- Field Khusus Guru (Diperbarui sesuai foto) -->
         <div class="form-grup field-guru" style="display: none;">
             <label for="inputMapel">Mata Pelajaran / Keahlian *</label>
-            <input type="text" id="inputMapel" required placeholder="Contoh: Administrasi Server">
-        </div>
-
-        <div class="form-grup">
-            <label for="inputAlamat">Alamat</label>
-            <input type="text" id="inputAlamat" placeholder="Kota / Kecamatan">
-        </div>
-        <div class="form-grup">
-            <label for="inputFoto">URL Foto (Opsional)</label>
-            <input type="url" id="inputFoto" placeholder="https://contoh.com/foto.jpg">
+            <input type="text" id="inputMapel" placeholder="Contoh: Administrasi Server">
         </div>
 
         <div class="modal-footer">
@@ -331,14 +247,11 @@ dialog::backdrop { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(2px); }
     </form>
 </dialog>
 
-<!-- Elemen Toast Notifikasi -->
 <div id="toast"></div>
 
-<!-- Library Supabase dari CDN -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 
 <script>
-// PENGATURAN SUPABASE
 const SUPABASE_URL = "https://kqmmbjeotbqrbbyhynti.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_yHUxsgNbkG4Na2RQ_AntrA_fK-ml0Qr";
 
@@ -348,9 +261,6 @@ const elDaftar = document.getElementById("daftar");
 const elJumlah = document.getElementById("jumlah");
 const elCari = document.getElementById("cari");
 const elFilterTipe = document.getElementById("filterTipe");
-const elFilterKelas = document.getElementById("filterKelas");
-const elFilterMapel = document.getElementById("filterMapel");
-
 const modal = document.getElementById("modalData");
 const formData = document.getElementById("formData");
 const modalJudul = document.getElementById("modalJudul");
@@ -366,67 +276,55 @@ let semuaData = [];
 function tampilkanToast(pesan, tipe = 'sukses') {
     elToast.textContent = pesan;
     elToast.className = `muncul ${tipe}`;
-    setTimeout(() => {
-        elToast.className = '';
-    }, 3000);
+    setTimeout(() => { elToast.className = ''; }, 3000);
 }
 
-// AMBIL DATA DARI SUPABASE
 async function muatData() {
-    tampilkanPesan("Memuat data guru & siswa...");
-    
-    const { data, error } = await db
-        .from("siswa")
-        .select("*")
-        .order("nama");
-
+    const { data, error } = await db.from("siswa").select("*").order("nama");
     if (error) {
         console.error(error);
-        tampilkanPesan("Data tidak bisa dimuat. Pastikan struktur tabel Supabase mendukung kolom 'tipe', 'mapel', dll.", true);
         return;
     }
-
     semuaData = data || [];
-    isiPilihanFilter();
     tampilkanData();
 }
 
-// TOGGLE FORM BERDASARKAN TIPE (GURU / SISWA)
 inputTipe.onchange = () => {
     const isGuru = inputTipe.value === "Guru";
     document.getElementById("labelNomorInduk").textContent = isGuru ? "NIP *" : "NIS *";
-    document.getElementById("inputNomorInduk").placeholder = isGuru ? "Contoh: 19850101..." : "Contoh: 22231001";
-    
     document.querySelectorAll(".field-siswa").forEach(el => el.style.display = isGuru ? "none" : "block");
     document.querySelectorAll(".field-guru").forEach(el => el.style.display = isGuru ? "block" : "none");
+    
+    if (isGuru) {
+        document.getElementById("inputKelas").removeAttribute("required");
+        document.getElementById("inputMapel").setAttribute("required", "true");
+    } else {
+        document.getElementById("inputMapel").removeAttribute("required");
+        document.getElementById("inputKelas").setAttribute("required", "true");
+    }
 };
 
-// TAMPILKAN KARTU KE LAYAR
 function tampilkanData() {
     const kataKunci = elCari.value.trim().toLowerCase();
     const tipeDipilih = elFilterTipe.value;
-    const kelasDipilih = elFilterKelas.value;
-    const mapelDipilih = elFilterMapel.value;
 
     const hasil = semuaData.filter((s) => {
         const tipeVal = s.tipe || "Siswa";
         const cocokTipe = !tipeDipilih || tipeVal === tipeDipilih;
-        const cocokKelas = !kelasDipilih || s.kelas === kelasDipilih;
-        const cocokMapel = !mapelDipilih || s.mapel === mapelDipilih;
-        
-        const nomorInduk = s.nis || s.nip || "";
         const cocokCari = !kataKunci || 
-                          s.nama.toLowerCase().includes(kataKunci) || 
-                          nomorInduk.toLowerCase().includes(kataKunci) ||
+                          (s.nama && s.nama.toLowerCase().includes(kataKunci)) || 
+                          (s.nis && s.nis.toLowerCase().includes(kataKunci)) ||
+                          (s.nip && s.nip.toLowerCase().includes(kataKunci)) ||
+                          (s.Mapel && s.Mapel.toLowerCase().includes(kataKunci)) ||
                           (s.mapel && s.mapel.toLowerCase().includes(kataKunci));
-        return cocokTipe && cocokKelas && cocokMapel && cocokCari;
+        return cocokTipe && cocokCari;
     });
 
-    elJumlah.textContent = hasil.length + " dari " + semuaData.length + " data ditampilkan";
+    elJumlah.textContent = `${hasil.length} dari ${semuaData.length} data ditampilkan`;
     elDaftar.replaceChildren();
 
     if (hasil.length === 0) {
-        tampilkanPesan(semuaData.length === 0 ? "Belum ada data. Klik tombol 'Tambah Data' di atas." : "Tidak ada data yang cocok.");
+        elDaftar.appendChild(el("p", "pesan", "Belum ada data."));
         return;
     }
 
@@ -441,45 +339,30 @@ function buatKartu(s) {
 
     const isi = el("div", "isi");
     const foto = el("div", "foto");
-    
-    if (s.foto_url) {
-        const gambar = document.createElement("img");
-        gambar.src = s.foto_url;
-        gambar.alt = "Foto " + s.nama;
-        gambar.loading = "lazy";
-        gambar.onerror = () => foto.replaceChildren(document.createTextNode(inisial(s.nama)));
-        foto.appendChild(gambar);
-    } else {
-        foto.textContent = inisial(s.nama);
-    }
+    foto.textContent = inisial(s.nama);
 
     isi.appendChild(foto);
-    isi.appendChild(el("h2", "nama", s.nama));
-    
-    const nomorInduk = isGuru ? ("NIP: " + (s.nip || "-")) : ("NIS " + (s.nis || "-"));
-    isi.appendChild(el("p", "sub-teks", nomorInduk));
+    isi.appendChild(el("h2", "nama", s.nama || "Tanpa Nama"));
+    isi.appendChild(el("p", "sub-teks", isGuru ? ("NIP: " + (s.nip || "-")) : ("NIS: " + (s.nis || "-")));
 
     const rincian = el("dl", "rincian");
     tambahBaris(rincian, "Tipe", s.tipe || "Siswa");
     if (isGuru) {
-        tambahBaris(rincian, "Mapel", s.mapel);
+        tambahBaris(rincian, "Mapel", s.Mapel || s.mapel);
     } else {
         tambahBaris(rincian, "Kelas", s.kelas);
-        tambahBaris(rincian, "Jenis Kelamin", s.jenis_kelamin);
-        tambahBaris(rincian, "Tanggal Lahir", formatTanggal(s.tanggal_lahir));
     }
-    tambahBaris(rincian, "Alamat", s.alamat);
     isi.appendChild(rincian);
 
-    // Tombol Aksi
     const divAksi = el("div", "aksi-kartu");
-    
     const btnEdit = document.createElement("button");
     btnEdit.textContent = "✏️ Ubah";
+    btnEdit.type = "button";
     btnEdit.onclick = () => bukaFormEdit(s);
     
     const btnHapus = document.createElement("button");
     btnHapus.textContent = "🗑️ Hapus";
+    btnHapus.type = "button";
     btnHapus.className = "btn-hapus-item";
     btnHapus.onclick = () => hapusData(s.id, s.nama);
 
@@ -491,7 +374,6 @@ function buatKartu(s) {
     return kartu;
 }
 
-// PROSES CRUD
 btnTambah.onclick = () => {
     modalJudul.textContent = "Tambah Data Baru";
     formData.reset();
@@ -511,11 +393,7 @@ function bukaFormEdit(s) {
     document.getElementById("inputNomorInduk").value = tipe === "Guru" ? (s.nip || "") : (s.nis || "");
     document.getElementById("inputNama").value = s.nama || "";
     document.getElementById("inputKelas").value = s.kelas || "";
-    document.getElementById("inputJk").value = s.jenis_kelamin || "Laki-laki";
-    document.getElementById("inputTgl").value = s.tanggal_lahir || "";
-    document.getElementById("inputMapel").value = s.mapel || "";
-    document.getElementById("inputAlamat").value = s.alamat || "";
-    document.getElementById("inputFoto").value = s.foto_url || "";
+    document.getElementById("inputMapel").value = s.Mapel || s.mapel || "";
     modal.showModal();
 }
 
@@ -535,11 +413,7 @@ formData.onsubmit = async (e) => {
         nip: tipe === "Guru" ? nomorInduk : null,
         nama: document.getElementById("inputNama").value.trim(),
         kelas: tipe === "Siswa" ? document.getElementById("inputKelas").value.trim() : null,
-        jenis_kelamin: tipe === "Siswa" ? document.getElementById("inputJk").value : null,
-        tanggal_lahir: tipe === "Siswa" && document.getElementById("inputTgl").value ? document.getElementById("inputTgl").value : null,
-        mapel: tipe === "Guru" ? document.getElementById("inputMapel").value.trim() : null,
-        alamat: document.getElementById("inputAlamat").value.trim() || null,
-        foto_url: document.getElementById("inputFoto").value.trim() || null
+        Mapel: tipe === "Guru" ? document.getElementById("inputMapel").value.trim() : null
     };
 
     btnSimpan.disabled = true;
@@ -563,23 +437,21 @@ formData.onsubmit = async (e) => {
     }
 
     modal.close();
-    tampilkanToast(id ? "Data berhasil diperbarui!" : "Data baru berhasil ditambahkan!");
+    tampilkanToast("Data berhasil disimpan!");
     muatData();
 };
 
 async function hapusData(id, nama) {
-    if (!confirm(`Apakah Anda yakin ingin menghapus data atas nama "${nama}"?`)) return;
-
+    if (!confirm(`Hapus data "${nama || 'Pengguna'}"?`)) return;
     const { error } = await db.from("siswa").delete().eq("id", id);
     if (error) {
-        tampilkanToast("Gagal menghapus data: " + error.message, "error");
+        tampilkanToast("Gagal menghapus: " + error.message, "error");
         return;
     }
-    tampilkanToast(`Data "${nama}" berhasil dihapus.`);
+    tampilkanToast("Data berhasil dihapus.");
     muatData();
 }
 
-// FUNGSI BANTU
 function el(tag, kelas, teks) {
     const e = document.createElement(tag);
     if (kelas) e.className = kelas;
@@ -605,44 +477,8 @@ function warnaHash(teks) {
     return (total * 47) % 360;
 }
 
-function formatTanggal(teks) {
-    if (!teks) return "";
-    return new Date(teks + "T00:00:00").toLocaleDateString("id-ID", {
-        day: "numeric", month: "long", year: "numeric"
-    });
-}
-
-function tampilkanPesan(teks, galat) {
-    elDaftar.replaceChildren(el("p", "pesan" + (galat ? " galat" : ""), teks));
-}
-
-function isiPilihanFilter() {
-    const kelasAktif = elFilterKelas.value;
-    elFilterKelas.replaceChildren(new Option("Kelas", ""));
-    const daftarKelas = [...new Set(semuaData.map((s) => s.kelas).filter(Boolean))].sort();
-    daftarKelas.forEach((k) => {
-        const opsi = el("option", "", k);
-        opsi.value = k;
-        elFilterKelas.appendChild(opsi);
-    });
-    elFilterKelas.value = kelasAktif;
-
-    const mapelAktif = elFilterMapel.value;
-    elFilterMapel.replaceChildren(new Option("Mapel", ""));
-    const daftarMapel = [...new Set(semuaData.map((s) => s.mapel).filter(Boolean))].sort();
-    daftarMapel.forEach((m) => {
-        const opsi = el("option", "", m);
-        opsi.value = m;
-        elFilterMapel.appendChild(opsi);
-    });
-    elFilterMapel.value = mapelAktif;
-}
-
 elCari.addEventListener("input", tampilkanData);
 elFilterTipe.addEventListener("change", tampilkanData);
-elFilterKelas.addEventListener("change", tampilkanData);
-elFilterMapel.addEventListener("change", tampilkanData);
-
 muatData();
 </script>
 </body>
